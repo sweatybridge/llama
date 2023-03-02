@@ -60,7 +60,7 @@ def main(ckpt_dir: str, tokenizer_path: str, temperature: float = 0.8, top_p: fl
         sys.stdout = open(os.devnull, 'w')
 
     generator = load(ckpt_dir, tokenizer_path, local_rank, world_size)
-    prompts = ["The capital of Germany is the city of", "Here is my sonnet in the style of Shakespeare about an artificial intelligence:"]
+    prompts = list(f.read_text() for f in sorted(Path("prompts").glob("*.txt")))
     results = generator.generate(prompts, max_gen_len=256, temperature=temperature, top_p=top_p)
 
     for result in results:
